@@ -1,6 +1,0 @@
-server:
-  port: 18899
-
-kube:
-  config:
-    path: kubeconf/dev-config-220
