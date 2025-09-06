@@ -14,6 +14,17 @@
     </properties>
 
     <modules>
+        <module>pure-grpc-demo</module>
+        <module>spring-boot-grpc-demo</module>
+        <module>database-demo</module>
+        <module>mq-demo</module>
+        <module>dev-base-demo</module>
+        <module>k8s-client-demo</module>
+        <module>agent-demo</module>
+        <module>springboot-demo</module>
+ 		<module>spring-security-demo</module>
+        <module>tool-demo</module>
+        <module>mcp-demo</module>
     </modules>
     <packaging>pom</packaging>
 
