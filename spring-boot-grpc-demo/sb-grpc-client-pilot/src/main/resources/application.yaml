@@ -1,0 +1,12 @@
+server:
+  port: 8800
+spring:
+  application:
+    name: spring-boot-grpc-pilot
+grpc:
+  client:
+    pilot:
+      address: 'static://127.0.0.1:19999'
+      negotiation-type: plaintext
+      enable-keep-alive: true
+      keep-alive-without-calls: true

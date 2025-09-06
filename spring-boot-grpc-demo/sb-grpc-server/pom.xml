@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>spring-boot-grpc-demo</artifactId>
+        <groupId>code.traveler</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>sb-grpc-server</artifactId>
+
+    <properties>
+        <grpc.version>1.46.0</grpc.version>
+        <protoc.version>3.20.1</protoc.version>
+        <netty4.version>4.1.58.Final</netty4.version>
+    </properties>
+
+    <dependencies>
+       <dependency>
+        <groupId>code.traveler</groupId>
+        <artifactId>sb-grpc-lib</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

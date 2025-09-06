@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "code.traveler.test.space.java.pure.grpc.lib.service";
+option java_outer_classname = "ServiceProto";
+
+import "cat.proto";
+package code.traveler.test.space.java.pure.grpc.lib.protobuf;
+
+service CatService {
+  rpc getDetail (stream CatRequest) returns (stream CatResponse){};
+}

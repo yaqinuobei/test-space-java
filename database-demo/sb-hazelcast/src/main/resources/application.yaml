@@ -1,0 +1,9 @@
+server:
+  port: 10077
+
+spring:
+  application:
+    name: pilot-cache
+
+cache:
+  localTest: true

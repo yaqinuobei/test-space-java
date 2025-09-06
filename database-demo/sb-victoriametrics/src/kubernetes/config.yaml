@@ -1,0 +1,7 @@
+#kconfigmap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: Title
+data:
+  key: ""
