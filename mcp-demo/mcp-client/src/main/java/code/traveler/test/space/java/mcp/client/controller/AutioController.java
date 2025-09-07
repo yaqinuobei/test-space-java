@@ -6,6 +6,8 @@ import com.alibaba.cloud.ai.dashscope.audio.DashScopeAudioSpeechOptions;
 import com.alibaba.cloud.ai.dashscope.audio.synthesis.SpeechSynthesisPrompt;
 import com.alibaba.cloud.ai.dashscope.audio.synthesis.SpeechSynthesisResponse;
 import com.alibaba.cloud.ai.dashscope.video.DashScopeVideoModel;
+import com.alibaba.cloud.ai.dashscope.video.DashScopeVideoOptions;
+import com.alibaba.cloud.ai.dashscope.video.VideoOptions;
 import com.alibaba.cloud.ai.dashscope.video.VideoPrompt;
 import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +72,13 @@ public class AutioController {
 
     @PostMapping("/video/call")
     public String videoByCall(@RequestBody @Valid AudioModelOptions audioModelOptions) {
+
+        VideoOptions videoOptions = DashScopeVideoOptions.builder()
+                                                         .model("wan2.2-t2v-plus")
+                                                         .build();
         String videoUrl = "";
-        String taskId = dashScopeVideoModel.submitGenTask(new VideoPrompt(audioModelOptions.getMessage()));
+        String taskId = dashScopeVideoModel.submitGenTask(new VideoPrompt(audioModelOptions.getMessage(),
+                                                                          videoOptions));
         System.out.println("任务ID：" + taskId);
 
         ResponseEntity<DashScopeVideoApi.VideoGenerationResponse> videoGenerationResponseResponseEntity =
