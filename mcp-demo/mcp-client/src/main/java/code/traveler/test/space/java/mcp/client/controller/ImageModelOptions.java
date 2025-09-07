@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryDTO {
+public class ImageModelOptions {
 
     private String message;
 
     private String model;
-
-    private String temperature;
 }

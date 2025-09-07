@@ -1,20 +1,17 @@
 package code.traveler.test.space.java.mcp.client.controller;
 
+import code.traveler.test.space.java.mcp.client.manage.ChatClientFactory;
 import code.traveler.test.space.java.mcp.client.manage.ChatManage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import javax.validation.Valid;
+import java.util.List;
 
-@RequestMapping("/chat/xx")
+@RequestMapping("/api/chat")
 @RestController
 @Validated
 public class ChatController {
@@ -22,9 +19,24 @@ public class ChatController {
     @Autowired
     private ChatManage chatManage;
 
-    @PostMapping("/askQuetion")
-    public Flux<ServerSentEvent<String>> queryCapacity(@RequestBody @Valid QueryDTO queryDTO) {
+    @Autowired
+    private ChatClientFactory clientFactory;
 
-        return chatManage.chat(queryDTO);
+    @PostMapping("/askQuetion/call")
+    public String chatByCall(@RequestBody @Valid ChatPlatformAndModelOptions queryDTO) {
+
+        return chatManage.chatByCall(queryDTO);
     }
+
+    @PostMapping("/askQuetion/stream")
+    public Flux<ServerSentEvent<String>> chatByStream(@RequestBody @Valid ChatPlatformAndModelOptions queryDTO) {
+
+        return chatManage.chatByStream(queryDTO);
+    }
+
+    @GetMapping("/models")
+    public List<String> listAvailableModels() {
+        return clientFactory.getAvailableModels();
+    }
+
 }

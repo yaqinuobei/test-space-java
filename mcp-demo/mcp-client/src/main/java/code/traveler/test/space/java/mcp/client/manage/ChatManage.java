@@ -1,7 +1,6 @@
 package code.traveler.test.space.java.mcp.client.manage;
 
-import code.traveler.test.space.java.mcp.client.controller.QueryDTO;
-import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
+import code.traveler.test.space.java.mcp.client.controller.ChatPlatformAndModelOptions;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,27 +9,39 @@ import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
-import java.util.Map;
-
 @Component
 public class ChatManage {
 
-    @Value("classpath:system-message.st")
+    @Autowired
+    private ChatClientFactory clientFactory;
+
+    @Value("classpath:system-message1.st")
     private Resource systemResource;
 
-    private ChatClient chatClient;
+    public String chatByCall(ChatPlatformAndModelOptions chatOptions) {
+        ChatClient chatClient = clientFactory.getChatClient(chatOptions);
 
-    private Map<String, ChatClient> chatModelMap;
-
-    public ChatManage(@Autowired DashScopeChatModel dashScopeChatModel){
-
-        ChatClient.Builder dashScopeBuilder = ChatClient.builder(dashScopeChatModel);
-        ChatClient dashScopeChatClient = dashScopeBuilder.build();
-        chatModelMap = Map.of("dashScope", dashScopeChatClient);
-
+        return chatClient.prompt()
+                         .system(systemResource)
+                         .user(chatOptions.getMessage())
+                         .call()
+                         .content();
     }
 
-    public Flux<ServerSentEvent<String>> chat(QueryDTO queryDTO){
-        return null;
+    public Flux<ServerSentEvent<String>> chatByStream(ChatPlatformAndModelOptions chatOptions) {
+        ChatClient chatClient = clientFactory.getChatClient(chatOptions);
+
+        return chatClient.prompt()
+                         .system(systemResource)
+                         .user(chatOptions.getMessage())
+                         .stream()
+                         .content()
+                         .map(content -> ServerSentEvent.builder(content)
+                                                        .event("message")
+                                                        .build())
+                         .onErrorResume(e -> Flux.just(ServerSentEvent.<String>builder()
+                                                                      .event("error")
+                                                                      .data(e.getMessage())
+                                                                      .build()));
     }
 }
