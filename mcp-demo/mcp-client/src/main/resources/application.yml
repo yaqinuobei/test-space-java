@@ -19,48 +19,48 @@ spring:
                 - -Dspring.main.web-application-type=none
                 - -Dspring.main.banner-mode=off
                 - -jar
-                - ${stdio-server-jar}
+                - ${STDIO_SERVER_JAR}
     openai:
       configs:
         #非思考模型 deepseek-chat 、思考模型 deepseek-reasoner
         - name: deepseek-chat
-          api-key: sk-5816efb2fe5241ac842d043184b33573
+          api-key: ${DEEPSEEK_API_KEY}
           base-url: https://api.deepseek.com
           chat.options.model: deepseek-chat
-      api-key: sk-5816efb2fe5241ac842d043184b33573
+      api-key: ${DEEPSEEK_API_KEY}
       chat:
-        api-key: sk-5816efb2fe5241ac842d043184b33573
+        api-key: ${DEEPSEEK_API_KEY}
         base-url: https://api.deepseek.com/v1
         options:
           model: deepseek-chat
       image:
-        api-key: sk-5816efb2fe5241ac842d043184b33573
+        api-key: ${DEEPSEEK_API_KEY}
         base-url: https://api.deepseek.com/v1
     dashscope:
       chat:
-        api-key: ${dashscope-api-key}
+        api-key: ${DASHSCOPE_API_KEY}
         options:
           model: qwen-plus
       image:
-        api-key: ${dashscope-api-key}
+        api-key: ${DASHSCOPE_API_KEY}
         options:
           model: qwen-image
         base-url: https://dashscope.aliyuncs.com
       audio:
         synthesis:
-          api-key: ${dashscope-api-key}
+          api-key: ${DASHSCOPE_API_KEY}
           options:
             model: wan2.2-t2v-plus
         transcription:
-          api-key: ${dashscope-api-key}
+          api-key: ${DASHSCOPE_API_KEY}
       rerank:
-        api-key: ${dashscope-api-key}
-      api-key: ${dashscope-api-key}
+        api-key: ${DASHSCOPE_API_KEY}
+      api-key: ${DASHSCOPE_API_KEY}
     #    openai:
     #      api-key: sk-5816efb2fe5241ac842d043184b33573
     #      base-url: https://api.deepseek.com/v1
     #    dashscope:
-    #      api-key: ${dashscope-api-key}
+    #      api-key: ${DASHSCOPE_API_KEY}
     #      chat:
     #        options:
     #          model: qwen-plus
@@ -73,6 +73,24 @@ spring:
       chat:
         options:
           model: deepseek-chat
+
+    chat:
+      memory:
+        repository:
+          jdbc:
+            postgres:
+              driver-class-name: org.postgresql.Driver
+              jdbc-url: jdbc:postgresql://127.0.0.1:5432/xxx?reWriteBatchedInserts=true
+              username: xxx
+              password: xxxxxx
+          redis:
+            host: 127.0.0.1
+            port: 6379
+            password: xxxx
+            timeout: 6000
+
+
+
 
 
 

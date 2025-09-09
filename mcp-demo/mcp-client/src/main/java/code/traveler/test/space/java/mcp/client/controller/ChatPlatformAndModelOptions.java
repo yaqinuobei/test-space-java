@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatPlatformAndModelOptions {
 
+    private String username;
+
     private String message;
 
     private String model;

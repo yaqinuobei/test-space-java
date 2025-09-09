@@ -6,7 +6,11 @@ import com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeVideoProperties;
 import com.alibaba.cloud.ai.autoconfigure.dashscope.ResolvedConnectionProperties;
 import com.alibaba.cloud.ai.dashscope.api.DashScopeVideoApi;
 import com.alibaba.cloud.ai.dashscope.video.DashScopeVideoModel;
+import org.springframework.ai.chat.memory.ChatMemoryRepository;
+import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +19,7 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClient;
 
 @Configuration
-public class DashScopeConfiguration {
+public class DashScopeConfig {
 
     @Bean
     @ConditionalOnMissingBean

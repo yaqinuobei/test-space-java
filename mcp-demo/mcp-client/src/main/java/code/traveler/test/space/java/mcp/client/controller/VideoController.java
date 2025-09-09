@@ -26,10 +26,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
-@RequestMapping("/api/audio")
+@RequestMapping("/api/video")
 @RestController
 @Validated
-public class AutioController {
+public class VideoController {
 
     //文生图模型
     @Autowired
@@ -42,7 +42,7 @@ public class AutioController {
     private DashScopeVideoApi dashScopeVideoApi;
 
     @PostMapping("/askQuetion/call")
-    public String audioByCall(@RequestBody @Valid AudioModelOptions audioModelOptions) {
+    public String audioByCall(@RequestBody @Valid VideoModelOptions audioModelOptions) {
         DashScopeAudioSpeechOptions.Builder audioOptionsBuilder = DashScopeAudioSpeechOptions.builder();
         audioOptionsBuilder.model("wan2.2-t2v-plus");
 
@@ -51,14 +51,15 @@ public class AutioController {
         }
 
         SpeechSynthesisPrompt audioPrompt = new SpeechSynthesisPrompt(audioModelOptions.getMessage(),
-                                                                      audioOptionsBuilder.build());
+                audioOptionsBuilder.build());
         SpeechSynthesisResponse synthesisResponse = dashScopeAudioSpeechModel.call(audioPrompt);
 
         File file = new File("E:\\code\\github\\test-space-java");
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            ByteBuffer byteBuffer = synthesisResponse.getResult()
-                                                     .getOutput()
-                                                     .getAudio();
+            ByteBuffer byteBuffer = synthesisResponse
+                    .getResult()
+                    .getOutput()
+                    .getAudio();
             fos.write(byteBuffer.array());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -71,28 +72,33 @@ public class AutioController {
     }
 
     @PostMapping("/video/call")
-    public String videoByCall(@RequestBody @Valid AudioModelOptions audioModelOptions) {
+    public String videoByCall(@RequestBody @Valid VideoModelOptions audioModelOptions) {
 
-        VideoOptions videoOptions = DashScopeVideoOptions.builder()
-                                                         .model("wan2.2-t2v-plus")
-                                                         .build();
+        VideoOptions videoOptions = DashScopeVideoOptions
+                .builder()
+                .model("wan2.2-t2v-plus")
+                .imageUrl(audioModelOptions.getImageUrl())
+                .build();
         String videoUrl = "";
-        String taskId = dashScopeVideoModel.submitGenTask(new VideoPrompt(audioModelOptions.getMessage(),
-                                                                          videoOptions));
+        String taskId = dashScopeVideoModel.submitGenTask(
+                new VideoPrompt(audioModelOptions.getMessage(), videoOptions));
         System.out.println("任务ID：" + taskId);
 
         ResponseEntity<DashScopeVideoApi.VideoGenerationResponse> videoGenerationResponseResponseEntity =
-                this.dashScopeVideoApi.queryVideoGenTask(taskId);
-        if (videoGenerationResponseResponseEntity.getStatusCode()
-                                                 .is2xxSuccessful()) {
+                this.dashScopeVideoApi.queryVideoGenTask(
+                taskId);
+        if (videoGenerationResponseResponseEntity
+                .getStatusCode()
+                .is2xxSuccessful()) {
             DashScopeVideoApi.VideoGenerationResponse response =
                     (DashScopeVideoApi.VideoGenerationResponse) videoGenerationResponseResponseEntity.getBody();
-            while (StringUtils.equals("RUNNING", response.getOutput()
-                                                         .getTaskStatus())) {
-                videoGenerationResponseResponseEntity =
-                        this.dashScopeVideoApi.queryVideoGenTask(taskId);
-                if (videoGenerationResponseResponseEntity.getStatusCode()
-                                                         .is2xxSuccessful()) {
+            while (StringUtils.equals("RUNNING", response
+                    .getOutput()
+                    .getTaskStatus())) {
+                videoGenerationResponseResponseEntity = this.dashScopeVideoApi.queryVideoGenTask(taskId);
+                if (videoGenerationResponseResponseEntity
+                        .getStatusCode()
+                        .is2xxSuccessful()) {
                     response =
                             (DashScopeVideoApi.VideoGenerationResponse) videoGenerationResponseResponseEntity.getBody();
                 } else {
@@ -104,10 +110,12 @@ public class AutioController {
                     throw new RuntimeException(e);
                 }
             }
-            if (StringUtils.equals("SUCCEEDED", response.getOutput()
-                                                        .getTaskStatus())) {
-                videoUrl = response.getOutput()
-                                   .getVideoUrl();
+            if (StringUtils.equals("SUCCEEDED", response
+                    .getOutput()
+                    .getTaskStatus())) {
+                videoUrl = response
+                        .getOutput()
+                        .getVideoUrl();
             } else {
                 System.out.println("视频生成失败，执行结果：" + response.getOutput());
             }
